@@ -1,0 +1,14 @@
+{
+  "name": "streamline",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "concurrently -n web,api -c cyan,green \"npm run dev --prefix web\" \"npm run dev --prefix server\"",
+    "build": "npm run build --prefix web",
+    "start": "concurrently -n web,api \"npm run start --prefix web\" \"npm run start --prefix server\"",
+    "install:all": "npm install && npm install --prefix web && npm install --prefix server"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}
