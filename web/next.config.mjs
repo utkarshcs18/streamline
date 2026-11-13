@@ -1,11 +1,12 @@
 /** @type {import('next').NextConfig} */
-const API_URL = process.env.API_URL || "http://localhost:4000";
-
 const nextConfig = {
   reactStrictMode: true,
-  // Proxy /api/* to the Express server so the browser never deals with CORS.
+  devIndicators: false,
+  // If an external backend is defined (e.g. Express on Railway/Render), proxy to it.
+  // Otherwise, Next.js handles /api routes internally via App Router route handlers.
   async rewrites() {
-    return [{ source: "/api/:path*", destination: `${API_URL}/api/:path*` }];
+    if (!process.env.API_URL) return [];
+    return [{ source: "/api/:path*", destination: `${process.env.API_URL}/api/:path*` }];
   },
 };
 

@@ -1,11 +1,15 @@
 import { NextResponse } from "next/server";
+import { connectToDatabase } from "@/lib/mongodb";
+import Waitlist from "@/models/Waitlist";
 import fs from "fs";
 import path from "path";
+
+export const dynamic = "force-dynamic";
 
 const dataDir = path.join(process.cwd(), "..", "server", "data");
 const signupsFile = path.join(dataDir, "signups.json");
 
-function getSignups(): Array<{ email: string; interest?: string; createdAt: string }> {
+function getLocalSignups(): Array<{ email: string; interest?: string; createdAt: string }> {
   try {
     if (!fs.existsSync(signupsFile)) return [];
     const content = fs.readFileSync(signupsFile, "utf-8").trim();
@@ -17,12 +21,12 @@ function getSignups(): Array<{ email: string; interest?: string; createdAt: stri
   }
 }
 
-function saveSignups(data: unknown) {
+function saveLocalSignups(data: unknown) {
   try {
     fs.mkdirSync(dataDir, { recursive: true });
     fs.writeFileSync(signupsFile, JSON.stringify(data, null, 2), "utf-8");
   } catch (err) {
-    console.error("Failed to write signups:", err);
+    console.error("Failed to write local backup:", err);
   }
 }
 
@@ -39,7 +43,34 @@ export async function POST(req: Request) {
       );
     }
 
-    const list = getSignups();
+    // ─── 1. MongoDB Mongoose Integration ───
+    const hasDB = await connectToDatabase();
+    if (hasDB) {
+      const existing = await Waitlist.findOne({ email }).lean();
+      if (existing) {
+        const count = await Waitlist.countDocuments({ status: { $ne: "unsubscribed" } });
+        return NextResponse.json({
+          ok: true,
+          message: "You're already on the waitlist.",
+          count,
+        });
+      }
+
+      await Waitlist.create({ email, interest });
+      const count = await Waitlist.countDocuments({ status: { $ne: "unsubscribed" } });
+
+      return NextResponse.json(
+        {
+          ok: true,
+          message: "You're on the waitlist. We'll be in touch soon.",
+          count,
+        },
+        { status: 201 }
+      );
+    }
+
+    // ─── 2. Local Fallback (if MONGODB_URI not set yet) ───
+    const list = getLocalSignups();
     if (list.some((s) => s.email === email)) {
       return NextResponse.json({
         ok: true,
@@ -49,7 +80,7 @@ export async function POST(req: Request) {
     }
 
     list.push({ email, interest, createdAt: new Date().toISOString() });
-    saveSignups(list);
+    saveLocalSignups(list);
 
     return NextResponse.json(
       {
@@ -59,7 +90,8 @@ export async function POST(req: Request) {
       },
       { status: 201 }
     );
-  } catch {
+  } catch (err) {
+    console.error("Join route error:", err);
     return NextResponse.json(
       { ok: false, error: "Something went wrong. Please try again." },
       { status: 500 }

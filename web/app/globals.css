@@ -5,21 +5,21 @@
   --font-serif: "Source Serif 4", "Instrument Serif", Georgia, Cambria, "Times New Roman", serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
 
-  --color-paper: #061220;
-  --color-ink: #f8fafc;
-  --color-moss: #10b981;
-  --color-sun: #f59e0b;
+  --color-paper: #f6f9f8;
+  --color-ink: #07192d;
+  --color-moss: #047857;
+  --color-sun: #d97706;
 }
 
 html {
   scroll-behavior: smooth;
-  background-color: #061220;
+  background-color: #f6f9f8;
   overflow-x: hidden;
 }
 
 body {
-  background-color: #061220;
-  color: #f1f5f9;
+  background-color: #f6f9f8;
+  color: #0f172a;
   font-family: var(--font-serif);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -34,6 +34,7 @@ h1, h2, h3, h4, .font-display {
   font-family: var(--font-display);
   font-weight: 400;
   letter-spacing: -0.01em;
+  color: #07192d;
 }
 
 .font-instrument {
@@ -42,8 +43,8 @@ h1, h2, h3, h4, .font-display {
 }
 
 ::selection {
-  background: rgba(16, 185, 129, 0.35);
-  color: #ffffff;
+  background: rgba(4, 120, 87, 0.2);
+  color: #064e3b;
 }
 
 /* ─── Animated film grain ─── */
@@ -52,8 +53,8 @@ h1, h2, h3, h4, .font-display {
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  opacity: 0.025;
-  mix-blend-mode: overlay;
+  opacity: 0.02;
+  mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 180px 180px;
@@ -99,7 +100,7 @@ h1, h2, h3, h4, .font-display {
   bottom: -2px;
   left: 0;
   width: 0;
-  height: 1px;
+  height: 1.5px;
   background: currentColor;
   transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -108,24 +109,14 @@ h1, h2, h3, h4, .font-display {
   width: 100%;
 }
 
-/* ─── Navbar scroll state (clean, seamless, strictly no border lines) ─── */
-.navbar-scrolled {
-  background-color: rgba(6, 18, 32, 0.92) !important;
-  border: none !important;
-  border-bottom: none !important;
-  box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
-}
-
-/* ─── Animated gradient text ─── */
+/* ─── Animated gradient text (rich coastal ocean to emerald) ─── */
 @keyframes gradientShift {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, #6ee7b7, #93c5fd, #6ee7b7);
+  background: linear-gradient(135deg, #047857, #0284c7, #047857);
   background-size: 200% 200%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -135,15 +126,15 @@ h1, h2, h3, h4, .font-display {
 
 /* ─── Floating particles ─── */
 @keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.25; }
-  50% { transform: translateY(-25px) rotate(5deg); opacity: 0.5; }
+  0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.15; }
+  50% { transform: translateY(-25px) rotate(5deg); opacity: 0.35; }
 }
 
 .particle {
   position: absolute;
   width: 4px;
   height: 4px;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(7, 25, 45, 0.15);
   border-radius: 50%;
   animation: float 8s ease-in-out infinite;
   pointer-events: none;
@@ -153,7 +144,7 @@ h1, h2, h3, h4, .font-display {
 .divider-line {
   width: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+  background: linear-gradient(90deg, transparent, rgba(15, 23, 42, 0.2), transparent);
   transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -165,10 +156,44 @@ h1, h2, h3, h4, .font-display {
 .hamburger-line {
   display: block;
   width: 20px;
-  height: 1.5px;
-  background: white;
+  height: 2px;
+  background: #0f172a;
   border-radius: 2px;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ─── Flowchart Interactive Animations ─── */
+@keyframes flowDash {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+
+.flow-dash-anim {
+  animation: flowDash 1.2s linear infinite;
+}
+
+@keyframes nodePulse {
+  0%, 100% {
+    r: 4;
+    opacity: 0.8;
+  }
+  50% {
+    r: 6.5;
+    opacity: 1;
+  }
+}
+
+.node-pulse-anim {
+  animation: nodePulse 1.8s ease-in-out infinite;
+}
+
+/* ─── Hide Next.js dev indicator badge ─── */
+nextjs-portal,
+[data-nextjs-dev-tools-button],
+[data-nextjs-toast],
+div[data-nextjs-toast-wrapper] {
+  display: none !important;
 }
 
 /* ─── Touch targets ─── */

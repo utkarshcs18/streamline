@@ -52,32 +52,34 @@ export default function JoinForm() {
   }
 
   return (
-    <div className="w-full flex flex-col items-center gap-3 font-serif">
-      {/* Live dynamic counter with animated count-up */}
-      {waitlistCount !== null && waitlistCount > 0 && (
-        <div className="reveal inline-flex items-center gap-2 sm:gap-2.5 rounded-full border border-emerald-500/30 bg-emerald-950/40 px-4 py-1.5 sm:px-5 sm:py-2 text-sm text-emerald-200 font-serif backdrop-blur-md shadow-sm">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
-          </span>
+    <div className="w-full flex flex-col items-center gap-4 font-serif">
+      {/* ─── Top Badges: Waitlist Counter & Drop Announcement ─── */}
+      <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 mb-2">
+        {waitlistCount !== null && waitlistCount > 0 && (
+          <div className="reveal inline-flex items-center gap-2 rounded-full border border-emerald-300 bg-white px-4 py-1.5 text-xs sm:text-sm text-emerald-900 font-serif shadow-xs">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600" />
+            </span>
+            <span>
+              <strong ref={countRef} className="font-instrument text-base text-slate-900 tabular-nums">
+                {waitlistCount}
+              </strong>{" "}
+              on the waitlist
+            </span>
+          </div>
+        )}
+
+        <div className="reveal inline-flex items-center gap-1.5 rounded-full border border-amber-300 bg-amber-50/90 px-4 py-1.5 text-xs sm:text-sm text-amber-950 font-serif shadow-xs">
+          <span className="text-amber-600 font-bold">✦</span>
           <span>
-            <strong ref={countRef} className="font-instrument text-base text-white tabular-nums">
-              {waitlistCount}
-            </strong>{" "}
-            on the waitlist
+            Stay Tuned{" "}
+            <strong className="font-instrument text-base text-amber-900 italic">December </strong>
           </span>
         </div>
-      )}
-
-      {/* Project drop announcement */}
-      <div className="reveal inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-amber-400/30 bg-amber-950/40 px-4 py-1.5 sm:px-5 sm:py-2 text-sm text-amber-200 font-serif backdrop-blur-md mb-4 sm:mb-6 shadow-sm">
-        <span className="text-amber-400">✦</span>
-        <span>
-          First project drops{" "}
-          <strong className="font-instrument text-base text-amber-100 italic">December 19th</strong>
-        </span>
       </div>
 
+      {/* ─── Join Waitlist Form ─── */}
       <form
         onSubmit={onSubmit}
         className="mx-auto flex w-full max-w-sm sm:max-w-md flex-col gap-3 text-left font-serif"
@@ -88,19 +90,19 @@ export default function JoinForm() {
           required
           autoComplete="email"
           placeholder="your@email.com"
-          className="rounded-xl border border-slate-700/80 bg-slate-900/60 px-4 py-3 sm:px-5 sm:py-3.5 text-base text-white font-serif outline-none transition-colors duration-200 placeholder:text-slate-400 focus:border-emerald-400 focus:bg-slate-900/90 focus:ring-1 focus:ring-emerald-400/40 backdrop-blur-md shadow-inner"
+          className="rounded-xl border border-slate-300 bg-white/95 px-4 py-3 sm:px-5 sm:py-3.5 text-base text-slate-900 font-serif outline-none transition-colors duration-200 placeholder:text-slate-400 focus:border-emerald-600 focus:bg-white focus:ring-2 focus:ring-emerald-500/20"
         />
         <input
           name="interest"
           type="text"
           maxLength={500}
           placeholder="What are you exploring? (optional)"
-          className="rounded-xl border border-slate-700/80 bg-slate-900/60 px-4 py-3 sm:px-5 sm:py-3.5 text-base text-white font-serif outline-none transition-colors duration-200 placeholder:text-slate-400 focus:border-emerald-400 focus:bg-slate-900/90 focus:ring-1 focus:ring-emerald-400/40 backdrop-blur-md shadow-inner"
+          className="rounded-xl border border-slate-300 bg-white/95 px-4 py-3 sm:px-5 sm:py-3.5 text-base text-slate-900 font-serif outline-none transition-colors duration-200 placeholder:text-slate-400 focus:border-emerald-600 focus:bg-white focus:ring-2 focus:ring-emerald-500/20"
         />
         <button
           type="submit"
           disabled={state.status === "loading"}
-          className="w-full rounded-xl bg-white px-5 py-3.5 font-serif text-lg text-slate-950 transition-colors duration-200 hover:bg-emerald-300 disabled:opacity-50 cursor-pointer shadow-md"
+          className="w-full rounded-xl bg-[#07192d] hover:bg-[#064e3b] px-5 py-3.5 font-serif text-lg text-white transition-colors duration-200 disabled:opacity-50 cursor-pointer"
         >
           {state.status === "loading" ? (
             <span className="inline-flex items-center justify-center gap-2">
@@ -119,7 +121,7 @@ export default function JoinForm() {
           <p
             role="status"
             className={`min-h-6 text-center text-sm font-serif ${
-              state.status === "error" ? "text-red-300" : "text-emerald-300"
+              state.status === "error" ? "text-red-600" : "text-emerald-700 font-medium"
             }`}
           >
             {state.message}

@@ -35,29 +35,6 @@ export function useReveal() {
   return ref;
 }
 
-// ─── Navbar scroll effect (smooth background fade, strictly no borders) ───
-export function useNavbarScroll() {
-  useEffect(() => {
-    const navbar = document.getElementById("main-navbar");
-    if (!navbar) return;
-
-    let ticking = false;
-    const onScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          navbar.classList.toggle("navbar-scrolled", window.scrollY > 60);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-}
-
 // ─── Animated counter ───
 export function useCountUp(target: number, duration: number = 1500) {
   const ref = useRef<HTMLSpanElement>(null);
